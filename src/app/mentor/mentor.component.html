@@ -1,0 +1,24 @@
+<nav class="navbar navbar-default navbar-static-top navbar-inverse">
+    <div class="container">
+      <a (click)="logout()" class="navbar-text navbar-right navbar-link">Logout</a>
+    </div>
+  </nav>
+<div class="container">
+    <div class="row">
+        <div class="col float-right">
+            <h4>Hello Mentor</h4>
+        </div>
+    </div>
+    </div>
+    
+    <div class="container">
+        <div class="tile job" *ngFor="let mentor of mentors">
+            <div class="header">
+                <div class="count">{{ mentor.id }}</div>
+            </div>
+            <div class="body">
+                <div class="title">{{ mentor.subject }}</div>
+            </div>
+        </div>
+        
+    </div>
