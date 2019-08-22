@@ -5,10 +5,14 @@ import * as firebase from 'firebase/app';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { RequestData } from '../register/register.component';
-import { post } from 'selenium-webdriver/http';
+import { RegisterComponent } from '../register'
+
+
 
 @Injectable()
 export class AuthService {
+
+ userExist: boolean;
 
   constructor(
    public afAuth: AngularFireAuth,
@@ -21,7 +25,7 @@ export class AuthService {
       this.afAuth.auth
       .signInWithPopup(provider)
       .then(res => {
-        resolve(res);
+         resolve(res);
       }, err => {
         console.log(err);
         reject(err);
@@ -35,7 +39,7 @@ export class AuthService {
       this.afAuth.auth
       .signInWithPopup(provider)
       .then(res => {
-        resolve(res);
+         resolve(res);
       }, err => {
         console.log(err);
         reject(err);
@@ -52,8 +56,6 @@ export class AuthService {
       .signInWithPopup(provider)
       .then(res => {
         console.log(res);
-        this.getRegisterData(res.additionalUserInfo.profile).subscribe()
-        
         resolve(res);
       }, err => {
         console.log(err);
@@ -83,13 +85,17 @@ export class AuthService {
         }),
         map(post => {
           // let usernameExist = post.findIndex(data => data.username === value.username);
-          let emailExist = post.findIndex(data => data.email === value.email);
+          let emailExist = post.findIndex(data => data.email === value.additionalUserInfo.profile.email);
           
-          if ( emailExist === -1) {
-            this.doRegister(value).subscribe();
+          if ( post.length === 0 && emailExist === -1) {
+            // this.doRegister(value).subscribe();
+            this.userExist = false;
+            console.log('email does not exist');
           } else {
-            console.log('email already exits');
+            this.userExist = true;
+            console.log('email already exist');
           }
+          return this.userExist;
         })
         )
       }
@@ -97,6 +103,7 @@ export class AuthService {
   doLogin(value){
     return new Promise<any>((resolve, reject) => {
       firebase.auth().signInWithEmailAndPassword(value.email, value.password)
+      
       .then(res => {
         console.log(res);
         resolve(res);
@@ -116,9 +123,6 @@ export class AuthService {
     });
   }
 
-  doCheckProfile() {
-    window.alert("Choose one profile");
-    
-  }
+  
 
 }

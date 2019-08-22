@@ -23,6 +23,7 @@ import { MenteeComponent } from './mentee/mentee.component';
 
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,7 +31,8 @@ import { MenteeComponent } from './mentee/mentee.component';
     UserComponent,
     RegisterComponent,
     MenteeComponent,
-    MentorComponent
+    MentorComponent,
+    
   ],
   imports: [
     BrowserModule,
