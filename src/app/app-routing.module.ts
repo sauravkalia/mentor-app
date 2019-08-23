@@ -1,18 +1,29 @@
-import { Routes } from '@angular/router';
-
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { UserComponent } from './user/user.component';
-import { RegisterComponent } from './register/register.component';
-import { UserResolver } from './user/user.resolver';
-import { AuthGuard } from './core/auth.guard';
+import { AuthGuard } from './core';
+import { RegisterComponent } from './register';
 import { MentorComponent } from './mentor/mentor.component';
 import { MenteeComponent } from './mentee/mentee.component';
 
-export const rootRouterConfig: Routes = [
+
+
+
+const appRoutes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, canActivate: [AuthGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [AuthGuard] },
-  { path: 'user', component: UserComponent,  resolve: { data: UserResolver}},
+  // { path: 'user', component: UserComponent,  resolve: { data: UserResolver}},
   { path: 'mentor', component: MentorComponent},
   { path: 'mentee', component: MenteeComponent}
 ];
+
+@NgModule({
+  imports: [
+    RouterModule.forRoot(appRoutes)
+  ],
+  exports: [RouterModule]
+})
+export class AppRoutingModule {
+
+}

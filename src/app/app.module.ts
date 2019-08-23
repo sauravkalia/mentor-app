@@ -1,9 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { rootRouterConfig } from './app.routes';
-import { AngularFireModule } from "@angular/fire";
-import { AngularFireAuthModule } from "@angular/fire/auth";
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 
@@ -20,6 +18,7 @@ import { HttpClientModule} from '@angular/common/http';
 import { AppComponent } from './app.component';
 import {  MentorComponent } from './mentor/mentor.component';
 import { MenteeComponent } from './mentee/mentee.component';
+import { AppRoutingModule } from './app-routing.module';
 
 
 
@@ -32,13 +31,13 @@ import { MenteeComponent } from './mentee/mentee.component';
     RegisterComponent,
     MenteeComponent,
     MentorComponent,
-    
+
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
+    AppRoutingModule,
     HttpClientModule,
-    RouterModule.forRoot(rootRouterConfig, { useHash: false }),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,

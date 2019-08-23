@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../core/index'
-import { Router, Params } from '@angular/router';
+import { AuthService } from '../core/index';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, EmailValidator } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+
 
 
 
@@ -16,8 +16,8 @@ export class RegisterComponent implements OnInit {
 
   registerForm: FormGroup;
   submitted = false;
-  errorMessage: string = '';
-  successMessage: string = '';
+  errorMessage = '';
+  successMessage = '';
   isMentor: boolean;
 
   registerData = [];
@@ -27,7 +27,7 @@ export class RegisterComponent implements OnInit {
     public authService: AuthService,
     private router: Router,
     private fb: FormBuilder,
-    
+
   ) {
     this.createForm();
   }
@@ -46,10 +46,18 @@ export class RegisterComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-    let value = this.registerForm.value;
-
-    this.authService.doRegister(value).subscribe();
-    
+    const value = this.registerForm.value;
+    this.authService.getRegisterData().subscribe((regArray) => {
+        const ue = this.authService.tryRegister(value, regArray);
+        if (ue) {
+          console.log('user exists');
+          this.router.navigate(['/login']);
+          } else {
+            this.authService.doRegister(value).subscribe();
+            console.log('registration done');
+            this.router.navigate(['/login']);
+          }
+    });
   }
   get f() { return this.registerForm.controls; }
 
@@ -57,57 +65,72 @@ export class RegisterComponent implements OnInit {
     this.authService.doFacebookLogin()
       .then(res => {
         this.verifyProfile();
-           this.authService.getRegisterData(res).subscribe();
-          if(this.authService.userExist){
-            //user already present
-            this.router.navigate(['/login']);
-          }else {
-            this.authService.doRegister(res).subscribe();
+        this.authService.getRegisterData().subscribe((regArray) => {
+          if (this.authService.tryRegisterSocial(res, regArray)) {
+             console.log('user is present');
+          } else {
+            this.authService.doRegister(res.additionalUserInfo.profile);
+            console.log('user registered');
           }
-      }, err => console.log(err)
-      )
+           });
+          }, err => console.log(err)
+      );
   }
 
   tryTwitterLogin() {
     this.authService.doTwitterLogin()
       .then(res => {
         this.verifyProfile();
-           this.authService.getRegisterData(res).subscribe();
-          if(this.authService.userExist){
-            //user already present
-            this.router.navigate(['/login']);
-          }else {
-            this.authService.doRegister(res).subscribe();
+        this.authService.getRegisterData().subscribe((regArray) => {
+          if (this.authService.tryRegisterSocial(res, regArray)) {
+             console.log('user is present');
+          } else {
+            this.authService.doRegister(res.additionalUserInfo.profile);
+            console.log('user registered');
           }
-        
-      }, err => console.log(err)
-      )
+           });
+          }, err => console.log(err)
+      );
   }
-  
+
 
   tryGoogleLogin() {
     this.authService.doGoogleLogin()
       .then(res => {
          this.verifyProfile();
-           this.authService.getRegisterData(res).subscribe((userExist) => {
-            if(!userExist){
-              this.authService.doRegister(res.additionalUserInfo.profile).subscribe();
-              console.log('registeration done');
-              this.router.navigate(['/login']);
-            }else {
-              console.log('user is already registered');
-              this.router.navigate(['/login']);
-            }
-           });
+         this.authService.getRegisterData().subscribe((regArray) => {
+           if (this.authService.tryRegisterSocial(res, regArray)) {
+              console.log('user is present');
+              const user = this.authService.trySocial(res, regArray);
+              if (user) {
+                if (user.isMentor) {
+                  this.router.navigate(['/mentor']);
+                } else {
+                  this.router.navigate(['/mentee']);
+                }
+              }
+           } else {
+             this.authService.doRegister(res.additionalUserInfo.profile);
+             console.log('user registered');
+             const user = this.authService.trySocial(res, regArray);
+             if (user) {
+                if (user.isMentor) {
+                  this.router.navigate(['/mentor']);
+                } else {
+                  this.router.navigate(['/mentee']);
+                }
+              }
+
+           }
+            });
            }, err => console.log(err)
-      )
+      );
   }
 
-  
+
   verifyProfile() {
-    // check profile of social login user
-    let m= confirm('Your Profile is Mentor');
-    if(m === true){
+    const m = confirm('Your Profile is Mentor');
+    if (m === true) {
       console.log('yes i am a mentor');
       this.registerForm.patchValue({isMentor : true});
      }else {
@@ -115,20 +138,6 @@ export class RegisterComponent implements OnInit {
       this.registerForm.patchValue({isMentor : false});
     }
   }
-
-  // tryRegister(value) {
-  //   this.authService.doRegister(value)
-  //     .subscribe(res => {
-  //       console.log(res);
-  //       this.errorMessage = "";
-  //       this.successMessage = "Your account has been created";
-  //     }, err => {
-  //       console.log(err);
-  //       this.errorMessage = err.message;
-  //       this.successMessage = "";
-  //     })
-  // }
-
 }
 
 export interface RequestData {

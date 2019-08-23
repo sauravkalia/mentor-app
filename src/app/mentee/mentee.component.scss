@@ -65,7 +65,9 @@ body {
     padding-top:2%;
 }
 
-
+.tile.wide .body .title {
+  padding:4%;
+}
 
 .tile.job .header {
   background: linear-gradient(to bottom right, #609931, #87bc27);
@@ -109,4 +111,16 @@ body {
     
     height: 100vh;
     flex-direction: column;
+}
+
+
+.main {
+    display: flex;
+    justify-content: center;
+    
+    height: 100vh;
+    flex-direction: column;
+}
+.collapse navbar-collapse {
+  border-color: #0aa361;
 }

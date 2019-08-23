@@ -1,17 +1,17 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../core/auth.service'
-import { Router, Params } from '@angular/router';
+import { AuthService } from '../core/auth.service';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'page-login',
+  selector: 'app-login',
   templateUrl: 'login.component.html',
   styleUrls: ['login.scss']
 })
 export class LoginComponent {
 
   loginForm: FormGroup;
-  errorMessage: string = '';
+  errorMessage = '';
 
   constructor(
     public authService: AuthService,
@@ -24,27 +24,24 @@ export class LoginComponent {
   createForm() {
     this.loginForm = this.fb.group({
       email: ['', Validators.required ],
-      password: ['',Validators.required]
+      password: ['', Validators.required]
     });
   }
 
-  
-
-  tryLogin(value){
-    this.authService.getRegisterData(value).subscribe((alreadyLogged) => {
-        if(!alreadyLogged){
-          console.log('user is not available');
+  doLogin(value) {
+    this.authService.getRegisterData().subscribe((regArray) => {
+      const user = this.authService.tryLogin(value, regArray);
+      console.log(user);
+      if (user) {
+        if (user.isMentor) {
+          this.router.navigate(['/mentor']);
+        } else {
+          this.router.navigate(['/mentee']);
         }
-        else{
-          this.router.navigate(['/user']);
+        console.log('user exists');
+        } else {
+          console.log('no user found');
         }
-    });}
-  //   this.authService.doLogin(value)
-  //   .then(res => {
-  //     this.router.navigate(['/user']);
-  //   }, err => {
-  //     console.log(err);
-  //     this.errorMessage = err.message;
-  //   })
-  // }
+  });
+  }
 }
