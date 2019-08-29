@@ -1,44 +1,49 @@
+<div class="topnav">
+  <a class="active" href="">Mentoring-App</a>
 
-  
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-      <div class="navbar-header">
-          <a href="#" class="navbar-brand">Mentoring Solution</a>
+  <div class="topnav-right">
+    <a target="_blank" class="dropdown-toggle" data-toggle="dropdown">See Mentors</a>
+    <div class="dropdown-menu d-background">
+      <div *ngIf="!mentorList.length">
+        <span class="d-b-drop">Please select any Topic to see mentors!</span>
       </div>
-
-      <div class="collapse navbar-collapse">
-        <ul class="nav navbar-nav navbar-right">
-          <li class="dropdown">
-            <a target="_blank" class="dropdown-toggle" role="button">Manage <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li>SHow info-1</li>
-              <li>SHow info-2</li>
-            </ul>
-          </li>
-        </ul>
+      <div *ngFor="let mentor of mentorList">
+        <a target="_blank" class="dropdown-item d-b-drop" *ngFor="let sub of mentor.subject">{{ mentor.firstName }} -
+          {{ sub }}</a>
       </div>
-      
+    </div>
+    <a target="_blank" (click)="doLogout()">Logout</a>
   </div>
-</nav>
-
-<div class="row">
-  <div class="col">
-      <h4>Hello Mentee</h4>
-  </div>
-</div>
-<div class="text-right">
-  <button type="button" class="btn btn-primary">Show-info</button>
 </div>
 
 <div class="container">
-  
-  <div class="tile job" *ngFor = "let mentee of mentees" (click)="onStore(mentee.id)">
-        <div class="header">
-          <div class="count">{{ mentee.id }}</div>
-          <div class="title">{{ mentee.name }}</div>
-        </div>
-        <div class="body">
-          <div class="title" >{{ mentee.subject }}</div>
-        </div>
-      </div>   
-</div> 
+  <br>
+  <div class="row">
+    <div class="col float-center heading">
+      <div>
+        <span>Hello</span>
+        <span class="name">{{ menteeUser?.firstName }} {{ menteeUser?.lastName }}</span>
+      </div>
+      <span> Please choose your Topic!</span>
+    </div>
+  </div>
+  <div class="container-1">
+    <div class="tile job" *ngFor="let subject of subjects" (click)="onStore(subject)"
+      [ngClass]="{'selected': isSelected(subject.name) > -1}">
+      <div class="header">
+        <div class="count">{{ subject.id }}</div>
+      </div>
+      <div class="body">
+        <div class="title">{{ subject.name }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container m-top-30 display-center">
+  <div class="row-slide">
+    <button class="btn btn-primary display-center" (click)="onSaveData()" [disabled]="loading || !menteeSubject.length">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+      <span class="save">Save</span>
+    </button>
+  </div>
+</div>

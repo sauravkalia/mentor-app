@@ -1,28 +1,40 @@
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a href="#" class="navbar-brand">Mentoring Solution</a>
-        </div>
+<div class="topnav">
+  <a class="active" href="">Mentoring-App</a>
 
-        
-    </div>
-</nav>
+  <div class="topnav-right">
+    <a target="_blank" (click)="doLogout()">Logout</a>
+  </div>
+</div>
 <div class="container">
-    <div class="row">
-        <div class="col float-right">
-            <h4>Hello Mentor</h4>
-        </div>
+
+<app-alert></app-alert>
+  <br>
+  <div class="row">
+    <div class="col float-center heading">
+      <div>
+        <span>Hello</span>
+        <span class="name">{{ mentorUser?.firstName }} {{ mentorUser?.lastName }}</span>
+      </div>
+      <span> Please choose your Topic!</span>
     </div>
+  </div>
+  <div class="container-1">
+    <div class="tile job" *ngFor="let subject of subjects" (click)="onStore(subject)"
+      [ngClass]="{'selected': isSelected(subject.name) > -1}">
+      <div class="header">
+        <div class="count">{{ subject.id }}</div>
+      </div>
+      <div class="body">
+        <div class="title">{{ subject.name }}</div>
+      </div>
     </div>
-    
-    <div class="container">
-        <div class="tile job" *ngFor="let mentor of mentors">
-            <div class="header">
-                <div class="count">{{ mentor.id }}</div>
-            </div>
-            <div class="body">
-                <div class="title">{{ mentor.subject }}</div>
-            </div>
-        </div>
-        
-    </div>
+  </div>
+</div>
+<div class="container m-top-30 display-center">
+  <div class="row-slide">
+    <button class="btn btn-primary display-center" (click)="onSaveData()" [disabled]="loading || !mentorSubject.length">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+      <span class="save">Save</span>
+    </button>
+  </div>
+</div>

@@ -3,6 +3,7 @@ import { AuthService } from '../core/index';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, EmailValidator } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { AlertService } from '../core/alert.service';
 
 
 
@@ -15,51 +16,73 @@ import { HttpClient } from '@angular/common/http';
 export class RegisterComponent implements OnInit {
 
   registerForm: FormGroup;
+  loading = false;
   submitted = false;
-  errorMessage = '';
-  successMessage = '';
   isMentor: boolean;
 
   registerData = [];
 
   constructor(
-    private http: HttpClient,
     public authService: AuthService,
     private router: Router,
     private fb: FormBuilder,
-
+    private alertService: AlertService
   ) {
-    this.createForm();
+
+    if (this.authService.currentUserValue) {
+      const currentUser = this.authService.currentUserValue;
+      if (currentUser) {
+        if (currentUser.isMentor) {
+          const redirectRoute = this.router.config.find(r => r.path === 'mentor');
+          redirectRoute.data = { isMentor: currentUser.isMentor };
+          this.router.navigate(['/mentor']);
+        } else {
+          const redirectRoute = this.router.config.find(r => r.path === 'mentee');
+          redirectRoute.data = { isMentor: currentUser.isMentor, email: currentUser.email };
+          this.router.navigate(['/mentee']);
+        }
+      }
   }
-  createForm() {
+  }
+
+  ngOnInit() {
     this.registerForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      username: ['', Validators.required],
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      username: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      phonenumber: ['', Validators.required],
-      isMentor: ['', Validators.required],
-    });
-  }
-  ngOnInit() {}
-
-  onSubmit() {
-    this.submitted = true;
-    const value = this.registerForm.value;
-    this.authService.getRegisterData().subscribe((regArray) => {
-        const ue = this.authService.tryRegister(value, regArray);
-        if (ue) {
-          console.log('user exists');
-          this.router.navigate(['/login']);
-          } else {
-            this.authService.doRegister(value).subscribe();
-            console.log('registration done');
-            this.router.navigate(['/login']);
-          }
+      phonenumber: ['', [Validators.required, Validators.minLength]],
+      isMentor: ['', [Validators.required]],
+      subject: ['']
     });
   }
   get f() { return this.registerForm.controls; }
+
+  onSubmit() {
+
+     this.submitted = true;
+     if (this.registerForm.invalid) {
+            return;
+        }
+
+     this.loading = true;
+     const value = this.registerForm.value;
+     this.authService.getRegisterData()
+     .subscribe((regArray) => {
+        const ue = this.authService.tryRegister(value, regArray)
+        .subscribe(user => {
+          if (user) {
+            this.alertService.success('user is already registered!');
+            this.loading = false;
+     } else {
+             this.authService.doRegister(value).subscribe();
+             this.alertService.success('user is registered!');
+             this.loading = false;
+            }
+        });
+    });
+  }
 
   tryFacebookLogin() {
     this.authService.doFacebookLogin()
@@ -97,8 +120,9 @@ export class RegisterComponent implements OnInit {
   tryGoogleLogin() {
     this.authService.doGoogleLogin()
       .then(res => {
-         this.verifyProfile();
-         this.authService.getRegisterData().subscribe((regArray) => {
+        console.log(res);
+        this.verifyProfile();
+        this.authService.getRegisterData().subscribe((regArray) => {
            if (this.authService.tryRegisterSocial(res, regArray)) {
               console.log('user is present');
               const user = this.authService.trySocial(res, regArray);
@@ -144,10 +168,10 @@ export interface RequestData {
   firstName: string;
   lastName: string;
   username: string;
-  email: EmailValidator;
+  email: string;
   password: string;
   phone: number;
-  mentor: string;
-  mentee: string;
+  isMentor: boolean;
+  subject: string;
   id?: string;
 }

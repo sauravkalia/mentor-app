@@ -5,6 +5,8 @@ import * as firebase from 'firebase/app';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { RequestData } from '../register/register.component';
+import { User } from './user.model';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 
 
 
@@ -13,10 +15,19 @@ import { RequestData } from '../register/register.component';
 export class AuthService {
 
   userExist: boolean;
+  private currentUserSubject: BehaviorSubject<User>;
+  public currentUser: Observable<User>;
 
   constructor(
     public afAuth: AngularFireAuth,
-    public http: HttpClient) { }
+    public http: HttpClient) {
+    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
+    this.currentUser = this.currentUserSubject.asObservable();
+  }
+
+  public get currentUserValue() {
+    return this.currentUserSubject.value;
+  }
 
   doFacebookLogin() {
     return new Promise<any>((resolve, reject) => {
@@ -74,7 +85,6 @@ export class AuthService {
       .pipe(
         map(responseData => {
           const regArray: RequestData[] = [];
-          console.log(responseData);
           for (const key in responseData) {
             if (responseData.hasOwnProperty(key)) {
               regArray.push({ ...responseData[key], id: key });
@@ -88,26 +98,32 @@ export class AuthService {
 
   tryRegisterSocial(res, regArray) {
     const emailExist = regArray.findIndex(data => data.email === res.additionalUserInfo.profile.email);
-    if ( emailExist === -1) {
-            return false;
-          } else {
-            return true;
-          }
-     }
-
-
-  tryRegister(value, regArray) {
-    const emailExist = regArray.findIndex(data => data.email === value.email);
-    if (regArray.length !== 0 && emailExist === -1) {
+    if (emailExist === -1) {
       return false;
     } else {
       return true;
     }
   }
 
+
+  tryRegister(value, regArray) {
+    const emailExist = regArray.findIndex(data => data.email === value.email);
+    if (regArray.length !== 0 && emailExist === -1) {
+      return of(false);
+    } else {
+      return of(true);
+    }
+  }
+
   tryLogin(value, regArray) {
     const user = regArray.find(data => data.email === value.email && data.password === value.password);
-    return user;
+    if (user) {
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      this.currentUserSubject.next(user);
+      return of(user);
+    } else {
+      return throwError('Email/Password is incorrect!');
+    }
   }
 
   trySocial(value, regArray) {
@@ -115,14 +131,16 @@ export class AuthService {
     return user;
   }
 
-  doLogout() {
+  tryLogout() {
     return new Promise((resolve, reject) => {
+      localStorage.removeItem('currentUser');
       if (firebase.auth().currentUser) {
-        this.afAuth.auth.signOut();
-        resolve();
+        firebase.auth().signOut();
       } else {
-        reject();
+        this.afAuth.auth.signOut();
       }
+      this.currentUserSubject.next(null);
+      resolve();
     });
   }
 

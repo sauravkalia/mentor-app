@@ -6,19 +6,20 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 
 import { LoginComponent } from './login/login.component';
-import { UserComponent } from './user/user.component';
 import { RegisterComponent } from './register/register.component';
-import { UserResolver } from './user/user.resolver';
 import { AuthGuard } from './core/auth.guard';
 import { AuthService } from './core/auth.service';
 import { UserService } from './core/user.service';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule} from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
-import {  MentorComponent } from './mentor/mentor.component';
+import { MentorComponent } from './mentor/mentor.component';
 import { MenteeComponent } from './mentee/mentee.component';
 import { AppRoutingModule } from './app-routing.module';
+import { MyOwnCustomMaterialModule } from 'src/material.module';
+import { AlertComponent } from './_components';
+import { AuthUserGuard } from './core/authUser.guard';
 
 
 
@@ -26,8 +27,8 @@ import { AppRoutingModule } from './app-routing.module';
 @NgModule({
   declarations: [
     AppComponent,
+    AlertComponent,
     LoginComponent,
-    UserComponent,
     RegisterComponent,
     MenteeComponent,
     MentorComponent,
@@ -36,13 +37,14 @@ import { AppRoutingModule } from './app-routing.module';
   imports: [
     BrowserModule,
     ReactiveFormsModule,
+    MyOwnCustomMaterialModule,
     AppRoutingModule,
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
   ],
-  providers: [AuthService, UserService, UserResolver, AuthGuard],
+  providers: [AuthService, UserService, AuthGuard, AuthUserGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -5,17 +5,17 @@ import { AuthGuard } from './core';
 import { RegisterComponent } from './register';
 import { MentorComponent } from './mentor/mentor.component';
 import { MenteeComponent } from './mentee/mentee.component';
+import { AuthUserGuard } from './core/authUser.guard';
 
 
 
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', pathMatch: 'full', redirectTo: 'login' },
   { path: 'login', component: LoginComponent, canActivate: [AuthGuard] },
-  { path: 'register', component: RegisterComponent, canActivate: [AuthGuard] },
-  // { path: 'user', component: UserComponent,  resolve: { data: UserResolver}},
-  { path: 'mentor', component: MentorComponent},
-  { path: 'mentee', component: MenteeComponent}
+  { path: 'register', component: RegisterComponent, canActivate: [] },
+  { path: 'mentor', component: MentorComponent, canActivate: [AuthUserGuard] },
+  { path: 'mentee', component: MenteeComponent, canActivate: [AuthUserGuard] },
 ];
 
 @NgModule({

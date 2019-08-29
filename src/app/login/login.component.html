@@ -1,25 +1,44 @@
-<h1 class="header">Login</h1>
 <div class="container">
-  <div class="row">
-    <div class="col-md-6 col-md-offset-3">
-      <form [formGroup]="loginForm">
-        <div class="form-group">
-          <label>Email address</label>
-          <input type="email" formControlName="email" class="form-control">
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" class="form-control" formControlName="password">
-          <label class="error">{{errorMessage}}</label>
-        </div>
-        <button type="submit" (click)="doLogin(loginForm.value)" class="btn btn-default">Login</button>
-      </form>
+  <div class="container-1">
+    <h1 class="header">Login</h1>
+    <div class="row jc-center">
+      <div class="jc-center">
+        <app-alert></app-alert>
+        <form [formGroup]="loginForm">
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" formControlName="email" class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+            <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+              <div *ngIf="f.email.errors.required">Email is required</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" formControlName="password" class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+            <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+              <div *ngIf="f.password.errors.required">Password is required</div>
+              <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
+            </div>
+          </div>
+          <button type="submit" (click)="doLogin(loginForm.value)" [disabled]="loading || loginForm.invalid"
+            class="btn btn-primary">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Login</button>
+
+        </form>
+      </div>
+
+      <p class="message">No account yet? </p>
     </div>
+    <br>
+    <div class="row">
+      <div class="col-xs-12">
+        <button class="btn btn-danger" routerLink="/register">Register</button>
+      </div>
+    </div>
+
   </div>
 
-  <div class="row">
-    <div class="col-md-4 col-md-offset-4">
-      <p>No account yet? <a href="/register">register</a></p>
-    </div>
-  </div>
 </div>
