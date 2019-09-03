@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../core/index';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, EmailValidator } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { AlertService } from '../core/alert.service';
 
 
@@ -90,10 +89,8 @@ export class RegisterComponent implements OnInit {
         this.verifyProfile();
         this.authService.getRegisterData().subscribe((regArray) => {
           if (this.authService.tryRegisterSocial(res, regArray)) {
-             console.log('user is present');
           } else {
             this.authService.doRegister(res.additionalUserInfo.profile);
-            console.log('user registered');
           }
            });
           }, err => console.log(err)
@@ -106,10 +103,8 @@ export class RegisterComponent implements OnInit {
         this.verifyProfile();
         this.authService.getRegisterData().subscribe((regArray) => {
           if (this.authService.tryRegisterSocial(res, regArray)) {
-             console.log('user is present');
           } else {
             this.authService.doRegister(res.additionalUserInfo.profile);
-            console.log('user registered');
           }
            });
           }, err => console.log(err)
@@ -120,35 +115,29 @@ export class RegisterComponent implements OnInit {
   tryGoogleLogin() {
     this.authService.doGoogleLogin()
       .then(res => {
-        console.log(res);
         this.verifyProfile();
         this.authService.getRegisterData().subscribe((regArray) => {
            if (this.authService.tryRegisterSocial(res, regArray)) {
-              console.log('user is present');
               const user = this.authService.trySocial(res, regArray);
-              if (user) {
-                if (user.isMentor) {
-                  this.router.navigate(['/mentor']);
-                } else {
-                  this.router.navigate(['/mentee']);
-                }
-              }
+              this.checkUser(user);
            } else {
              this.authService.doRegister(res.additionalUserInfo.profile);
-             console.log('user registered');
              const user = this.authService.trySocial(res, regArray);
-             if (user) {
-                if (user.isMentor) {
-                  this.router.navigate(['/mentor']);
-                } else {
-                  this.router.navigate(['/mentee']);
-                }
-              }
-
+             this.checkUser(user);
            }
             });
            }, err => console.log(err)
       );
+  }
+
+  checkUser(user) {
+    if (user) {
+      if (user.isMentor) {
+        this.router.navigate(['/mentor']);
+      } else {
+        this.router.navigate(['/mentee']);
+      }
+    }
   }
 
 

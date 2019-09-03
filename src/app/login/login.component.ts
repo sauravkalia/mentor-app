@@ -4,7 +4,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../core/user.service';
 import { AlertService } from '../core/alert.service';
-import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -30,15 +29,7 @@ export class LoginComponent implements OnInit {
     if (this.authService.currentUserValue) {
       const currentUser = this.authService.currentUserValue;
       if (currentUser) {
-        if (currentUser.isMentor) {
-          const redirectRoute = this.router.config.find(r => r.path === 'mentor');
-          redirectRoute.data = { email: currentUser.email };
-          this.router.navigate(['/mentor']);
-        } else {
-          const redirectRoute = this.router.config.find(r => r.path === 'mentee');
-          redirectRoute.data = { email: currentUser.email };
-          this.router.navigate(['/mentee']);
-        }
+        this.onLoadingPage(currentUser);
       }
     }
   }
@@ -54,7 +45,30 @@ export class LoginComponent implements OnInit {
 
   get f() { return this.loginForm.controls; }
 
+  onLoadingPage(user) {
+    if (user.isMentor) {
+      const redirectRoute = this.router.config.find(r => r.path === 'mentor');
+      redirectRoute.data = { email: user.email };
+      this.router.navigate(['/mentor']);
+    } else {
+      const redirectRoute = this.router.config.find(r => r.path === 'mentee');
+      redirectRoute.data = { email: user.email };
+      this.router.navigate(['/mentee']);
+    }
+  }
 
+  onTryLoginSuccess(user) {
+    if (user.isMentor) {
+      const route = this.router.config.find(r => r.path === 'mentor');
+      route.data = { user };
+      this.router.navigateByUrl('/mentor');
+
+    } else {
+      const route = this.router.config.find(r => r.path === 'mentee');
+      route.data = { user };
+      this.router.navigateByUrl('/mentee');
+    }
+  }
 
   doLogin(value) {
     this.submitted = true;
@@ -68,16 +82,7 @@ export class LoginComponent implements OnInit {
           .subscribe(
             user => {
               if (user) {
-                if (user.isMentor) {
-                  const route = this.router.config.find(r => r.path === 'mentor');
-                  route.data = { user };
-                  this.router.navigateByUrl('/mentor');
-
-                } else {
-                  const route = this.router.config.find(r => r.path === 'mentee');
-                  route.data = { user };
-                  this.router.navigateByUrl('/mentee');
-                }
+                this.onTryLoginSuccess(user);
               }
             },
             error => {

@@ -35,10 +35,8 @@ export class AuthService {
       this.afAuth.auth
         .signInWithPopup(provider)
         .then(res => {
-          console.log(res);
           resolve(res);
         }, err => {
-          console.log(err);
           reject(err);
         });
     });
@@ -50,10 +48,8 @@ export class AuthService {
       this.afAuth.auth
         .signInWithPopup(provider)
         .then(res => {
-          console.log(res);
           resolve(res);
         }, err => {
-          console.log(err);
           reject(err);
         });
     });
@@ -69,7 +65,6 @@ export class AuthService {
         .then(res => {
           resolve(res);
         }, err => {
-          console.log(err);
           reject(err);
         });
     });
@@ -78,6 +73,16 @@ export class AuthService {
     return this.http.post('https://mentoring-app-63b39.firebaseio.com/userData/registerationData.json',
       value
     );
+  }
+
+  fetchRegisterData(callback) {
+    firebase.database().ref(`userData/registerationData`)
+    .orderByKey()
+    .on('value', (data) => {
+      console.log(Object.values(data.val()));
+      callback(Object.values(data.val()));
+      // return Object.values(data.val());
+    });
   }
 
   getRegisterData() {

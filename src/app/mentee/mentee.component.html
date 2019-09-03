@@ -1,17 +1,7 @@
 <div class="topnav">
-  <a class="active" href="">Mentoring-App</a>
+  <a class="active" target="_blank">Mentoring-App</a>
 
   <div class="topnav-right">
-    <a target="_blank" class="dropdown-toggle" data-toggle="dropdown">See Mentors</a>
-    <div class="dropdown-menu d-background">
-      <div *ngIf="!mentorList.length">
-        <span class="d-b-drop">Please select any Topic to see mentors!</span>
-      </div>
-      <div *ngFor="let mentor of mentorList">
-        <a target="_blank" class="dropdown-item d-b-drop" *ngFor="let sub of mentor.subject">{{ mentor.firstName }} -
-          {{ sub }}</a>
-      </div>
-    </div>
     <a target="_blank" (click)="doLogout()">Logout</a>
   </div>
 </div>
@@ -43,7 +33,25 @@
   <div class="row-slide">
     <button class="btn btn-primary display-center" (click)="onSaveData()" [disabled]="loading || !menteeSubject.length">
       <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-      <span class="save">Save</span>
+      <span class="save">Show Mentor List</span>
     </button>
   </div>
+</div>
+
+
+<div class="container">
+    <table class="table table-bordered d-b-drop" *ngIf="mentorList.length">
+        <thead class="thead">
+          <tr>
+            <th>Mentor Name</th>
+            <th>Subject</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let mentor of mentorList">
+          <tr *ngFor="let sub of mentor.subject">
+            <td>{{ mentor.firstName }}</td>
+            <td>{{ sub }}</td>
+          </tr> 
+        </tbody>
+      </table>
 </div>

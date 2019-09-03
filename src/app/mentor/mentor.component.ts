@@ -1,10 +1,10 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AuthService } from '../core/auth.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Location } from '@angular/common';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../core/user.service';
 import * as firebase from 'firebase';
+import { AlertService } from '../core/alert.service';
 
 @Component({
   selector: 'app-mentor',
@@ -18,22 +18,13 @@ export class MentorComponent implements OnInit {
   loading = false;
 
 
-  subjects = [{ id: 1, name: 'Skating' },
-  { id: 2, name: 'Boxing' },
-  { id: 3, name: 'Karate' },
-  { id: 4, name: 'Judo' },
-  { id: 5, name: 'Cycling' },
-  { id: 6, name: 'Yoga' },
-  { id: 7, name: 'Hiking' },
-  { id: 8, name: 'Lifting' },
-  { id: 9, name: 'SkyDiving' },
-  { id: 10, name: 'Machine-Learning' }];
+  subjects = this.userService.subjects;
 
   profileForm: FormGroup;
 
   constructor(
     public authService: AuthService,
-    private location: Location,
+    private alertService: AlertService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private router: Router,
@@ -45,7 +36,6 @@ export class MentorComponent implements OnInit {
     let email = this.route.snapshot.data.email;
     if (!email) {
       email = JSON.parse(localStorage.getItem('currentUser')).email;
-      console.log(email);
     }
     firebase.database().ref(`userData/registerationData`)
       .orderByChild('email')
@@ -54,7 +44,6 @@ export class MentorComponent implements OnInit {
         this.mentorUser = Object.values(data.val())[0];
         this.mentorUser.id = Object.keys(data.val())[0];
         this.detectorRef.detectChanges();
-        console.log(this.mentorUser);
       });
 
 
@@ -72,6 +61,7 @@ export class MentorComponent implements OnInit {
   onSaveData() {
     this.loading = true;
     this.userService.updateData(this.mentorUser.id, this.mentorSubject);
+    this.alertService.success(`Congrates! ' Topics are Submitted.`);
     this.loading = false;
 
   }

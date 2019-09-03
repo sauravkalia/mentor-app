@@ -161,6 +161,7 @@ body {
 
 .topnav-right {
   float: right;
+  cursor: pointer;
 }
 
 .row-slide {
@@ -191,7 +192,15 @@ body {
 }
 
 .d-b-drop {
-  background-color: black;
+  margin-top: 70px;
+    table-layout: fixed;
+    table-layout: auto;
+    border: double;
+    border-color: cadetblue;
+    text-align-last: center;
+    table-layout: fixed;
+    text-transform: capitalize;
+    background-color: #679f2f;
   color: white;
 }
 
@@ -204,5 +213,11 @@ body {
     font-weight: 600;
     margin-left: 16px;
   }
+}
+
+.thead {
+  text-decoration: underline;
+  -webkit-text-stroke: medium;
+
 }
 

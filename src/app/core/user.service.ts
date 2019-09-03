@@ -5,7 +5,6 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
-import { of, Subject, BehaviorSubject } from 'rxjs';
 
 
 
@@ -22,10 +21,19 @@ export class UserService {
   ) {
   }
 
+  subjects = [{ id: 1, name: 'Skating' },
+  { id: 2, name: 'Boxing' },
+  { id: 3, name: 'Karate' },
+  { id: 4, name: 'Judo' },
+  { id: 5, name: 'Cycling' },
+  { id: 6, name: 'Yoga' },
+  { id: 7, name: 'Hiking' },
+  { id: 8, name: 'Lifting' },
+  { id: 9, name: 'SkyDiving' },
+  { id: 10, name: 'Machine-Learning' }];
 
   updateData(value, subArray) {
     const user = firebase.database().ref(`userData/registerationData/${value}`);
-    console.log(user);
     user.update({
       subject: subArray
     });
