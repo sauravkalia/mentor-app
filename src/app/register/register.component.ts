@@ -93,7 +93,7 @@ export class RegisterComponent implements OnInit {
             this.authService.doRegister(this.storeSocialData(res.additionalUserInfo.profile)).subscribe();
             this.alertService.success('user is registered!');
            } else {
-            this.alertService.success('user is already registered!');
+            this.alertService.error('user is already registered!');
            }
             });
            }
@@ -110,7 +110,7 @@ export class RegisterComponent implements OnInit {
             this.authService.doRegister(this.storeSocialData(res.additionalUserInfo.profile)).subscribe();
             this.alertService.success('user is registered!');
            } else {
-            this.alertService.success('user is already registered!');
+            this.alertService.error('user is already registered!');
            }
             });
            }
