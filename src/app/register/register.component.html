@@ -1,88 +1,96 @@
 <div class="container">
-  <div class="container-1">
-    <h1 class="header">Register</h1>
-    <div class="row jc-center">
-      <div class="jc-center">
-        <app-alert></app-alert>
-        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="login-form">
-          <div class="form-group">
-              <label for="firstName">First Name</label>
-              <input type="text" formControlName="firstName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" />
-              <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
-                  <div *ngIf="f.firstName.errors.required">First Name is required</div>
-              </div>
-          </div>
-          <div class="form-group">
-              <label for="lastName">Last Name</label>
-              <input type="text" formControlName="lastName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" />
-              <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
-                  <div *ngIf="f.lastName.errors.required">Last Name is required</div>
-              </div>
-          </div>
-          <div class="form-group">
-              <label for="username">Username</label>
-              <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
-              <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-                  <div *ngIf="f.username.errors.required">Username is required</div>
-              </div>
-          </div>
-          <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
-              <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-                  <div *ngIf="f.email.errors.required">Email is required</div>
-              </div>
-          </div>
-          <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
-              <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                  <div *ngIf="f.password.errors.required">Password is required</div>
-                  <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
-              </div>
-          </div>
-          <div class="form-group">
-              <label for="phonenumber">Phone-Number</label>
-              <input type="number" formControlName="phonenumber" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.phonenumber.errors }" />
-              <div *ngIf="submitted && f.phonenumber.errors" class="invalid-feedback">
-                  <div *ngIf="f.phonenumber.errors.required">Phone-Number is required</div>
-                  <div *ngIf="f.phonenumber.errors.minlength">Phone-Number must be of 10 digits!</div>
-              </div>
-          </div>
-         
-      
-      
-          <div class="form-group form-check-inline">
-              <label class="form-check-label-1" for="radio1">
-                <input type="radio" formControlName="isMentor" class="form-check-input" id="radio1" name="isMentor" [value]="true">Mentor
-              </label>
-              
+    <div class="container-1">
+        <h1 class="header">Register</h1>
+        <div class="row jc-center">
+            <div class="jc-center">
+                <app-alert></app-alert>
+                <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="login-form">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" formControlName="firstName" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" />
+                        <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+                            <div *ngIf="f.firstName.errors.required">First Name is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" formControlName="lastName" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" />
+                        <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+                            <div *ngIf="f.lastName.errors.required">Last Name is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" formControlName="username" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+                        <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                            <div *ngIf="f.username.errors.required">Username is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" formControlName="email" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+                        <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                            <div *ngIf="f.email.errors.required">Email is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" formControlName="password" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+                        <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                            <div *ngIf="f.password.errors.required">Password is required</div>
+                            <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phonenumber">Phone-Number</label>
+                        <input type="number" formControlName="phonenumber" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.phonenumber.errors }" />
+                        <div *ngIf="submitted && f.phonenumber.errors" class="invalid-feedback">
+                            <div *ngIf="f.phonenumber.errors.required">Phone-Number is required</div>
+                            <div *ngIf="f.phonenumber.errors.minlength">Phone-Number must be of 10 digits!</div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group form-check-inline">
+                        <label class="form-check-label-1" for="radio1">
+                            <input type="radio" formControlName="isMentor" class="form-check-input" id="radio1"
+                                name="isMentor" [value]="true">Mentor
+                        </label>
+
+                    </div>
+                    <div class="form-check-inline">
+                        <label class="form-check-label-2" for="radio2">
+                            <input type="radio" class="form-check-input" formControlName="isMentor" id="radio2"
+                                name="isMentor" [value]="false">Mentee
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <button [disabled]="loading || registerForm.invalid" class="btn btn-primary">
+                            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                            Register
+                        </button>
+                        <a routerLink="/login" class="btn btn-link">Cancel</a>
+                    </div>
+                </form>
             </div>
-            <div class="form-check-inline">
-              <label class="form-check-label-2" for="radio2">
-                <input type="radio" class="form-check-input" formControlName="isMentor" id="radio2" name="isMentor" [value]="false">Mentee
-              </label>
-            </div> 
-         <div class="form-group">
-              <button [disabled]="loading || registerForm.invalid" class="btn btn-primary">
-                  <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                  Register
-              </button>
-              <a routerLink="/login" class="btn btn-link">Cancel</a>
-          </div>
-      </form>
-      </div>
+        </div>
+        <h3>-----OR-----</h3>
+        <br>
+        <div class="row">
+            <div class="row-1">
+                <button (click)="tryGoogleLogin()" class="fa fa-google"></button>
+                <button (click)="tryFacebookLogin()" class="fa fa-facebook"></button>
+
+            </div>
+        </div>
     </div>
-    <h3>-----OR-----</h3>
-    <br>
-    <div class="row">
-      <div class="row-1">
-        <a href="#" (click)="tryFacebookLogin()" class="fa fa-facebook"></a>
-        <a href="#" (click)="tryTwitterLogin()"class="fa fa-twitter"></a>
-        <a href="#" (click)="tryGoogleLogin()"class="fa fa-google"></a>
-      </div>
-    </div>
-  </div>
 </div>
 
 
@@ -292,19 +300,3 @@
       <a href="#" class="fa fa-google"></a>
     </div>
   </div> -->
-
-  
-
-
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  

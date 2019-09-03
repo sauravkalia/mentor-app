@@ -42,18 +42,6 @@ export class AuthService {
     });
   }
 
-  doTwitterLogin() {
-    return new Promise<any>((resolve, reject) => {
-      const provider = new firebase.auth.TwitterAuthProvider();
-      this.afAuth.auth
-        .signInWithPopup(provider)
-        .then(res => {
-          resolve(res);
-        }, err => {
-          reject(err);
-        });
-    });
-  }
 
   doGoogleLogin() {
     return new Promise<any>((resolve, reject) => {
@@ -131,9 +119,14 @@ export class AuthService {
     }
   }
 
-  trySocial(value, regArray) {
-    const user = regArray.find(data => data.email === value.additionalUserInfo.profile.email);
-    return user;
+  trySocial(value) {
+    if (value) {
+      localStorage.setItem('currentUser', JSON.stringify(value));
+      this.currentUserSubject.next(value);
+      return of(value);
+    } else {
+      return throwError('Email/Password is incorrect!');
+    }
   }
 
   tryLogout() {

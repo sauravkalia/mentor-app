@@ -20,6 +20,7 @@ export class RegisterComponent implements OnInit {
   isMentor: boolean;
 
   registerData = [];
+   socialData: {email: string, firstName: string, lastName: string, isMentor: boolean, subject: string, password: string};
 
   constructor(
     public authService: AuthService,
@@ -86,70 +87,63 @@ export class RegisterComponent implements OnInit {
   tryFacebookLogin() {
     this.authService.doFacebookLogin()
       .then(res => {
-        this.verifyProfile();
+        console.log(res);
         this.authService.getRegisterData().subscribe((regArray) => {
-          if (this.authService.tryRegisterSocial(res, regArray)) {
-          } else {
-            this.authService.doRegister(res.additionalUserInfo.profile);
-          }
-           });
-          }, err => console.log(err)
+          if (!this.authService.tryRegisterSocial(res, regArray)) {
+            this.authService.doRegister(this.storeSocialData(res.additionalUserInfo.profile)).subscribe();
+            this.alertService.success('user is registered!');
+           } else {
+            this.alertService.success('user is already registered!');
+           }
+            });
+           }
       );
   }
 
-  tryTwitterLogin() {
-    this.authService.doTwitterLogin()
-      .then(res => {
-        this.verifyProfile();
-        this.authService.getRegisterData().subscribe((regArray) => {
-          if (this.authService.tryRegisterSocial(res, regArray)) {
-          } else {
-            this.authService.doRegister(res.additionalUserInfo.profile);
-          }
-           });
-          }, err => console.log(err)
-      );
-  }
 
 
   tryGoogleLogin() {
     this.authService.doGoogleLogin()
       .then(res => {
-        this.verifyProfile();
         this.authService.getRegisterData().subscribe((regArray) => {
-           if (this.authService.tryRegisterSocial(res, regArray)) {
-              const user = this.authService.trySocial(res, regArray);
-              this.checkUser(user);
+          if (!this.authService.tryRegisterSocial(res, regArray)) {
+            this.authService.doRegister(this.storeSocialData(res.additionalUserInfo.profile)).subscribe();
+            this.alertService.success('user is registered!');
            } else {
-             this.authService.doRegister(res.additionalUserInfo.profile);
-             const user = this.authService.trySocial(res, regArray);
-             this.checkUser(user);
+            this.alertService.success('user is already registered!');
            }
             });
-           }, err => console.log(err)
+           }
       );
   }
 
-  checkUser(user) {
-    if (user) {
-      if (user.isMentor) {
-        this.router.navigate(['/mentor']);
-      } else {
-        this.router.navigate(['/mentee']);
-      }
-    }
+  storeSocialData(value) {
+    this.socialData = {
+      email: value.email,
+      firstName: value.given_name,
+      lastName: value.family_name,
+      isMentor: this.verifyProfile(),
+      subject: '',
+      password: this.choosePassword()
+    };
+    return this.socialData;
   }
+
+
 
 
   verifyProfile() {
     const m = confirm('Your Profile is Mentor');
     if (m === true) {
-      console.log('yes i am a mentor');
-      this.registerForm.patchValue({isMentor : true});
+      return true;
      }else {
-      console.log('i am a mentee');
-      this.registerForm.patchValue({isMentor : false});
+      return false;
     }
+  }
+
+  choosePassword() {
+    const password = prompt('Type your password');
+    return password;
   }
 }
 
