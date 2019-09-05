@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../core/user.service';
 import * as firebase from 'firebase';
 import { AlertService } from '../core/alert.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-mentor',
@@ -29,8 +30,15 @@ export class MentorComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private userService: UserService,
-    private detectorRef: ChangeDetectorRef
-  ) { }
+    private detectorRef: ChangeDetectorRef,
+    private spinner: NgxSpinnerService
+  ) {
+    this.spinner.show();
+    setTimeout(() => {
+        /** spinner ends after 5 seconds */
+        this.spinner.hide();
+    }, 3000);
+  }
 
   ngOnInit() {
     let email = this.route.snapshot.data.email;

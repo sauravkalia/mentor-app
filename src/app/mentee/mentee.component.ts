@@ -3,6 +3,7 @@ import { UserService } from '../core/user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as firebase from 'firebase';
 import { AuthService } from '../core';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -22,7 +23,14 @@ export class MenteeComponent implements OnInit {
               private route: ActivatedRoute,
               private router: Router,
               private authService: AuthService,
-              private detectorRef: ChangeDetectorRef) { }
+              private detectorRef: ChangeDetectorRef,
+              private spinner: NgxSpinnerService) {
+    this.spinner.show();
+    setTimeout(() => {
+      /** spinner ends after 5 seconds */
+      this.spinner.hide();
+    }, 3000);
+  }
 
 
 
@@ -53,7 +61,7 @@ export class MenteeComponent implements OnInit {
 
   onSaveData() {
     this.mentorList.splice(0);
-    this.loading  = true;
+    this.loading = true;
     this.userService.updateData(this.menteeUser.id, this.menteeSubject);
     this.onCompareData();
   }

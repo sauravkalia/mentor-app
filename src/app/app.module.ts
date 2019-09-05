@@ -20,6 +20,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { MyOwnCustomMaterialModule } from 'src/material.module';
 import { AlertComponent } from './_components';
 import { AuthUserGuard } from './core/authUser.guard';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 
 
@@ -43,6 +44,7 @@ import { AuthUserGuard } from './core/authUser.guard';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
+    NgxSpinnerModule
   ],
   providers: [AuthService, UserService, AuthGuard, AuthUserGuard],
   bootstrap: [AppComponent]
