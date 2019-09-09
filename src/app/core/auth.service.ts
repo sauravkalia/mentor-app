@@ -63,16 +63,6 @@ export class AuthService {
     );
   }
 
-  fetchRegisterData(callback) {
-    firebase.database().ref(`userData/registerationData`)
-    .orderByKey()
-    .on('value', (data) => {
-      console.log(Object.values(data.val()));
-      callback(Object.values(data.val()));
-      // return Object.values(data.val());
-    });
-  }
-
   getRegisterData() {
     return this.http.get<{ [key: string]: RequestData }>('https://mentoring-app-63b39.firebaseio.com/userData/registerationData.json')
       .pipe(

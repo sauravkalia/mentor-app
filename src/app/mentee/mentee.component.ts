@@ -27,7 +27,6 @@ export class MenteeComponent implements OnInit {
               private spinner: NgxSpinnerService) {
     this.spinner.show();
     setTimeout(() => {
-      /** spinner ends after 5 seconds */
       this.spinner.hide();
     }, 3000);
   }
@@ -64,6 +63,7 @@ export class MenteeComponent implements OnInit {
     this.loading = true;
     this.userService.updateData(this.menteeUser.id, this.menteeSubject);
     this.onCompareData();
+    this.loading = false;
   }
 
   doLogout() {
@@ -85,7 +85,6 @@ export class MenteeComponent implements OnInit {
         .on('value', (data) => {
           mentors = Object.values(data.val());
           this.onCompareBoth(user, mentors);
-          this.loading = false;
         });
     }
   }
