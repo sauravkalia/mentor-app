@@ -1,12 +1,5 @@
-<ngx-spinner
-bdOpacity = 0.9
-bdColor = "#77a0eb"
-size = "default" 
-color = "#fff"
-type = "pacman"
-[fullScreen] = "true"
->
-<p style="color: white" > Loading... </p>
+<ngx-spinner bdOpacity=0.9 bdColor="#77a0eb" size="default" color="#fff" type="pacman" [fullScreen]="true">
+  <p style="color: white"> Loading... </p>
 </ngx-spinner>
 
 <div class="topnav">
@@ -51,18 +44,18 @@ type = "pacman"
 
 
 <div class="container">
-    <table class="table table-bordered d-b-drop" *ngIf="mentorList.length">
-        <thead class="thead">
-          <tr>
-            <th>Mentor Name</th>
-            <th>Subject</th>
-          </tr>
-        </thead>
-        <tbody *ngFor="let mentor of mentorList">
-          <tr *ngFor="let sub of mentor.subject">
-            <td>{{ mentor.firstName }}</td>
-            <td>{{ sub }}</td>
-          </tr> 
-        </tbody>
-      </table>
+  <table class="table table-bordered d-b-drop" *ngIf="mentorList.length">
+    <thead class="thead">
+      <tr>
+        <th>Mentor Name</th>
+        <th>Subject</th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let mentor of mentorList">
+      <tr *ngFor="let sub of mentor.subject">
+        <td>{{ mentor.firstName }}</td>
+        <td>{{ sub }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>

@@ -52,7 +52,7 @@ export class RegisterComponent implements OnInit {
       username: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      phonenumber: ['', [Validators.required, Validators.minLength]],
+      phonenumber: ['', [Validators.required, Validators.min(1000000000), Validators.max(9999999999)]],
       isMentor: ['', [Validators.required]],
       subject: ['']
     });

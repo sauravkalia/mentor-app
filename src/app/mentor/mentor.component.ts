@@ -69,7 +69,7 @@ export class MentorComponent implements OnInit {
   onSaveData() {
     this.loading = true;
     this.userService.updateData(this.mentorUser.id, this.mentorSubject);
-    this.alertService.success(`Congrates! ' Topics are Submitted.`);
+    this.alertService.success(`Congrates! Your topics are Submitted.`);
     this.loading = false;
 
   }

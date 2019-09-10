@@ -59,11 +59,10 @@ export class MenteeComponent implements OnInit {
   }
 
   onSaveData() {
-    this.mentorList.splice(0);
     this.loading = true;
+    this.mentorList.splice(0);
     this.userService.updateData(this.menteeUser.id, this.menteeSubject);
     this.onCompareData();
-    this.loading = false;
   }
 
   doLogout() {
@@ -104,6 +103,8 @@ export class MenteeComponent implements OnInit {
           }
         }
       });
+
+      this.loading = false;
     });
   }
 
