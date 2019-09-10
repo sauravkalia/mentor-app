@@ -43,7 +43,7 @@ export class AuthService {
   }
 
 
-  doGoogleLogin() {
+    doGoogleLogin() {
     return new Promise<any>((resolve, reject) => {
       const provider = new firebase.auth.GoogleAuthProvider();
       provider.addScope('profile');
@@ -63,7 +63,7 @@ export class AuthService {
     );
   }
 
-  getRegisterData() {
+    getRegisterData() {
     return this.http.get<{ [key: string]: RequestData }>('https://mentoring-app-63b39.firebaseio.com/userData/registerationData.json')
       .pipe(
         map(responseData => {

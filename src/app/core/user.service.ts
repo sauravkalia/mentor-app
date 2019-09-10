@@ -5,6 +5,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
+import { of } from 'rxjs';
 
 
 
@@ -32,22 +33,46 @@ export class UserService {
   { id: 9, name: 'SkyDiving' },
   { id: 10, name: 'Machine-Learning' }];
 
-  updateData(value, subArray) {
+  updateeData(value, subArray) {
     const user = firebase.database().ref(`userData/registerationData/${value}`);
     user.update({
       subject: subArray
     });
   }
 
+  updateData(value, subArray) {
+   return new Promise<any>((resolve, reject) => {
+    const user = firebase.database().ref(`userData/registerationData/${value}`);
+    user.update({
+      subject: subArray
+    }).then(res => {
+      resolve(res);
+    }, err => {
+      reject(err);
+    });
+   });
+  }
+
   getUsers() {
     let mentors = [];
-    const user = firebase.database().ref(`userData/registerationData`)
+    firebase.database().ref(`userData/registerationData`)
       .orderByChild('isMentor')
       .equalTo(true)
       .on('value', (data) => {
         mentors = Object.values(data.val());
       });
-    return mentors;
+    return of(mentors);
   }
 
+  getIntialUser(email) {
+    firebase.database().ref(`userData/registerationData`)
+      .orderByChild('email')
+      .equalTo(email)
+      .on('value', (data) => {
+        return {
+          user: Object.values(data.val())[0],
+          id: Object.keys(data.val())[0]
+        };
+      });
+  }
 }

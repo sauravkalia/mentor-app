@@ -22,7 +22,7 @@
               <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
             </div>
           </div>
-          <button type="submit" (click)="doLogin(loginForm.value)" [disabled]="loading || loginForm.invalid"
+          <button type="submit" (click)="doLogin(loginForm.value)" 
             class="btn btn-primary">
             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
             Login</button>

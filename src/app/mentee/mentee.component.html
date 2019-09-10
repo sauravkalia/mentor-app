@@ -44,6 +44,8 @@
 
 
 <div class="container">
+  <br>
+  <app-alert *ngIf="mentorList.length === 0" class="display-center"></app-alert>
   <table class="table table-bordered d-b-drop" *ngIf="mentorList.length">
     <thead class="thead">
       <tr>
@@ -52,6 +54,7 @@
       </tr>
     </thead>
     <tbody *ngFor="let mentor of mentorList">
+        <tr *ngIf="mentorList === 0">Sorry! no mentor found></tr>
       <tr *ngFor="let sub of mentor.subject">
         <td>{{ mentor.firstName }}</td>
         <td>{{ sub }}</td>

@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { UserService } from '../core/user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as firebase from 'firebase';
-import { AuthService } from '../core';
+import { AuthService, AlertService } from '../core';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 
@@ -16,6 +16,7 @@ export class MenteeComponent implements OnInit {
   resultSubject: string[] = [];
   menteeUser;
   mentorList = [];
+  length ;
   loading = false;
   subjects = this.userService.subjects;
 
@@ -24,7 +25,8 @@ export class MenteeComponent implements OnInit {
               private router: Router,
               private authService: AuthService,
               private detectorRef: ChangeDetectorRef,
-              private spinner: NgxSpinnerService) {
+              private spinner: NgxSpinnerService,
+              private alertService: AlertService) {
     this.spinner.show();
     setTimeout(() => {
       this.spinner.hide();
@@ -44,10 +46,7 @@ export class MenteeComponent implements OnInit {
       .on('value', (data) => {
         this.menteeUser = Object.values(data.val())[0];
         this.menteeUser.id = Object.keys(data.val())[0];
-        this.detectorRef.detectChanges();
       });
-
-
   }
   onStore(subject) {
     const index = this.menteeSubject.findIndex(sub => sub === subject.name);
@@ -75,20 +74,12 @@ export class MenteeComponent implements OnInit {
   }
 
   onCompareData() {
-    let mentors = [];
-    const user = firebase.database().ref(`userData/registerationData`);
-    if (user) {
-      user
-        .orderByChild('isMentor')
-        .equalTo(true)
-        .on('value', (data) => {
-          mentors = Object.values(data.val());
-          this.onCompareBoth(user, mentors);
-        });
-    }
+    this.userService.getUsers().subscribe((mentors) => {
+      this.onCompareBoth(mentors);
+    });
   }
 
-  onCompareBoth(user, mentors) {
+  onCompareBoth(mentors) {
     this.menteeUser.subject.forEach(subject => {
       mentors.forEach(mentor => {
         if (mentor.subject
@@ -103,7 +94,10 @@ export class MenteeComponent implements OnInit {
           }
         }
       });
-
+      this.length = this.mentorList.length;
+      if (this.length === 0) {
+        this.alertService.error('Sorry! No mentor found');
+      }
       this.loading = false;
     });
   }
