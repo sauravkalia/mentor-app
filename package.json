@@ -36,7 +36,11 @@
     "npm": "^6.11.3",
     "rxjs": "^6.4.0",
     "rxjs-compat": "^6.3.3",
-    "zone.js": "^0.8.29"
+    "zone.js": "^0.8.29",
+    "mem": "5.1.1",
+    "braces": "3.0.2",
+    "ws": "7.1.2",
+    "https-proxy-agent": "2.2.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.13.0",
